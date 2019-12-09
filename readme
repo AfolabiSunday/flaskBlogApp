@@ -1,0 +1,275 @@
+
+1. Created the the home page with basic layout just to run the app
+
+
+2. for sign up form (
+    - install the flask_wtf and create a new file forms.py
+    - import and inherit from the Flaskform in flask_wtf
+    - create your needed field with validators(
+        StringField, Boleanfield,PasswordField (validators=[])
+        summit btn too
+        examples {
+            fname = StringField("First Name", validators=[DataRequired(), Length(min=2, max=20)])
+
+        }
+    ) 
+    - Go to the folder where you have your function create a new function and add route{
+        route must contain list of acceptable methods eg{
+            app.route(/register, methods=["GET","POST"])
+        }
+    }
+    - create an instance of your forms.py class [ form = class()]
+    - return render_template, an html templates(this tamplate will be in a folder called 'templates')
+    - create your templates folder and create your html file there
+    - add your form.hidden_tag()
+    - form.<field label name>
+    - form.<fieldname>{
+        examples{
+            <form method="post" action="" >
+                {{ form.hidden_tag() }}
+
+                {{ form.fname.label }}
+                {{ form.fname}}
+            </form>
+        }
+    }
+)
+
+3. Validate form submitted, redirect and give messages of creating the form(
+    -- import redirect, url_for, flash
+    -- use if form.validate_on_submit():
+    -- add your flash messages{
+        flash(f'messages here', 'bootsrap category')
+    }
+    -- redirect to your desired page
+    -- 
+)
+
+4. flash messages on form submission(
+    -- add jinja templating to the top of your body in your based layout{
+        % with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{category}} ">
+        {{ message }}
+    </div>
+    {% endfor%}
+    {% endif %}
+    {% endwith %}
+    }
+
+)
+
+5. adding individual form validators before submitting form {
+    {% extends "layout.html" %}
+{% block content %}
+<div class="container">
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Sign Up Now</legend>
+            <div class="form-group">
+                {{ form.fname.label(class="form-control-label") }}
+
+                {% if form.fname.errors %}
+                {{ form.fname(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.fname.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.fname(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{ form.lname.label(class="form-control-label") }}
+
+                    {% if form.lname.errors %}
+                    {{ form.fname(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.lname.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.lname(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <fieldset class="form-group">
+                    <div class="form-group">
+                        {{ form.Email.label(class="form-control-label") }}
+
+                        {% if form.Email.errors %}
+                        {{ form.Email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.Email.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ form.Email(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+
+                    <fieldset class="form-group">
+                        <div class="form-group">
+                            {{ form.password.label(class="form-control-label") }}
+
+                            {% if form.password.errors %}
+                            {{ form.password(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.password(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+
+
+                        <fieldset class="form-group">
+                            <div class="form-group">
+                                {{ form.Confirm_password.label(class="form-control-label") }}
+
+                                {% if form.Confirm_password.errors %}
+                                {{ form.Confirm_password(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.Confirm_password.errors %}
+                                    <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                {{ form.Confirm_password(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                {{ form.submit(class="btn btn-outline-info") }}
+                            </div>
+    </form>
+</div>
+</div>
+{% endblock %}
+}
+
+B   B   B BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+
+
+lOGIN PAGE[
+
+1. create a login funtion and also a login html within the template folder
+2. code your login function and add route(this mus contain , methods=['GET', 'POST'])
+3. write your login.html to handle input( see code in the reg section)
+
+]  
+
+C C C C CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+wORKING WITH DATABASES[
+    1. USING SQLALCHEMY Seems to be the best, it can be move around to diffrent databases, install it py runing pip install flask_sqlalchemy
+    2. specify and configure path for the db to use[
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+    ]
+    3. create an instant of the db[
+        db = SQLALCHEMY(app)
+    ]
+    4. Turing the database into package{
+        a. create a new folder with same name As the old outline
+        b. add an __init__.py file to it
+        c. move all file and folder into the new folder that has the __init__ file in it
+        d. adjust the import statement
+        e. create a new file in the new folder called rounte and move your views there
+        f. ajust the main file before to be run.py and only has the following and should be in the root folder[
+            from flask_intro import app
+            if __name__ == '__main__':
+                app.run(debug=True)
+        ] 
+        g. All import from the main package should contain the package name
+    }
+
+
+
+
+
+]
+
+D D D DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+Authentication before adding to db[
+    1.Download flask_bcrypt and import where you have your views and create an instance of the becrpt
+    2.create a hashed password using bcrypt, HP =bcrypt(instance).generate_password_hash(form password fiel).decode('utc-8)
+    3. Assign to new instance of user to be added to the db[
+        user = ModelName(fieldInModel=fieldInForm)]
+    4.All this are added after the if form.validate_on_submit
+######################################################################################
+    Authenticate user for unique email, username and the likes
+#############################################################################
+    import the db model to create an instance of it
+    from flask_intro.model import User and fliter the user object
+    5. create a function like this for all field to validate{
+        def validate_field(self, field):
+            user = User.query.filter_by(fieldInDb=FieldToFilter.data).first() this should be the same
+            if user:
+                raise validationError('Validation Message')
+        add this to the class in forms.py you want to validate
+    }
+##############################################################
+1. create login by installing flask-login, after this, initializate it in the init folder, login_manager = TheImportedloginManager(app)
+2. add the login mnager to the model file after importing it 
+3. Create a decorated function that takes a user_id{
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+4. import user Usermixin and inherit it in the class with the user_id from the mode form(User)
+5. modify the login function tocheck for details in db using this way{
+    user=User.query.filter_by(fieldIntheModel=fieldInForm)
+    if user and bcrypt.check_password_hash(user.passInDB, form.password.data)
+    login_user (user, remember=form.remember.data)
+    return redirect(url_for('destination'))
+    flash_message}
+6. redirect all route to the home page if logi, import current user from  flask_login
+7. add a current_user.is_authentucated:
+    return redirect(url_for('home))
+    for all btn on the navbar
+8. Create a logout function and add route{
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+}
+
+]
+9. condition your template to only show certain bar option on log in or logout using the jinja templating engine [
+    i class="nav-item"></li>
+        <a class="nav-link" href="{{ url_for('logout') }}">logout</a>
+        </li>
+
+        {% else %}
+        <li class="nav-item"></li>
+        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('Register') }}">Register</a>
+        </li>
+      </ul>
+      {% endif %}
+
+]
+
+#############################################
+customing pages to be viewed by login users
+#########################################3##
+  === Create the function with it route and add at the top of the function immediately after the route decorateor, add another decorator @login_required(this is imported from the flask_login module we download)
+  === Go into the init.py file and set login route{ login_manager.login_view = 'login'}
+  === create page to render_template
+  === style the error message when redirect using boostrap like this { login_manager.login_message_category = 'info'}
+  == making sure the page redirect back to the requested page after login(
+      next_page = request.args.get('next') ('next is the link url from the linkbar)
+            return redirect(next_page) if next_page else redirect(url_for('home'))
+  )
