@@ -273,3 +273,80 @@ customing pages to be viewed by login users
       next_page = request.args.get('next') ('next is the link url from the linkbar)
             return redirect(next_page) if next_page else redirect(url_for('home'))
   )
+
+  ###################################################
+  Creating account pages/
+  ###################################################
+  1. create your accounts templates and user the current_user.feild you want to show in the template using the jinja format
+  2. add your image in the template views like this, image_file = url_for('static', filename='profile_pic/' + current_user.image_file)
+  3. add the image_file variable to the template as context
+  4. use jinja template in the image field, make sure there is na image_file in the models.py too
+
+
+
+#######################################################
+Creating form to update user info when login
+#######################################################
+
+1. create a bluePrint in the forms.py file {
+    create a class with Update and inherit from Flaskform
+    copy the registration field and check to make sure the validators are ok (
+          def validate_email(self, Email):
+        if Email.data != current_user.Email:
+            user = User.query.filter_by(email=Email.data).first()
+            if user:
+                raise ValidationError('This email has been used before'
+    )
+2.  import form to route,  create  an instance of the newly created form, form=newCreatedForm()
+        add this to the account function like in the register and add the form instance as context in the render_template line
+
+3. adjust your template to display the newly added field, copy te reg field and remove cield not needed
+4. Got the route/views file and add the methods=['GET', 'POST'] to the route 
+5.           {
+    @app.route('/account', methods=['GET', 'POST'])
+@login_required
+def account():
+    form = UpdateForm()
+    if form.validate_on_submit():
+        current_user.fname = form.fname.date
+        db.session.commit()
+        flash('Details Successfully Updated', 'success')
+        return redirect(url_for('account'))
+    elif request.method == 'GET':
+        form.fname.data = current_user.fname
+    image_file = url_for('static', filename='profile_pic/' + current_user.image_file)
+    return render_template('account.html', title='Account', image_file=image_file, form=for
+    }
+6. import filefield and fielallowed from flask_wtf.file to add pic to profile when editing details
+7. create a variable to accept the pic(     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])]) )
+8. add the field to the account html field (<div class="form-group">
+                    {{ form.picture.label() }}
+                    {{ form.picture(class="form-control-file") }}
+                    {% if form.picture.errors %}
+                        {% for error in form.picture.errors %}
+                            <span class="text-danger">{{ error }}</span></br>
+                        {% endfor %}
+                    {% endif %}
+                </div>) immediatly after untop of the submit btn
+9. add enctype="multipart/form-data" to where you have your method in the account html
+10. add condition to under the if form.validate_on_submit(){
+
+     if form.picture.data:
+            picture_file = save_picture(form.picture.data) === save_picture is afunction on it own
+}
+} this is the code for resizing too {
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/profile_pic', picture_fn)
+    
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+    return picture_fn
+     
+            }
+            current_user.image_file = picture_file 
