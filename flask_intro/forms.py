@@ -1,6 +1,6 @@
 from flask_login import current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, validators, PasswordField, TextAreaField, SubmitField, BooleanField
 from wtforms.validators import Length, DataRequired, Email, EqualTo, ValidationError
 from flask_intro.models import User
 from flask_wtf.file import FileField, FileAllowed
@@ -53,3 +53,10 @@ class UpdateForm(FlaskForm):
             user = User.query.filter_by(email=Email.data).first()
             if user:
                 raise ValidationError('This email has been used before')
+
+
+
+class PostForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    content = TextAreaField('Content', validators=[DataRequired()])
+    submit = SubmitField('Post')
