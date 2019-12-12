@@ -1,0 +1,548 @@
+
+1. Created the the home page with basic layout just to run the app
+
+
+2. for sign up form (
+    - install the flask_wtf and create a new file forms.py
+    - import and inherit from the Flaskform in flask_wtf
+    - create your needed field with validators(
+        StringField, Boleanfield,PasswordField (validators=[])
+        summit btn too
+        examples {
+            fname = StringField("First Name", validators=[DataRequired(), Length(min=2, max=20)])
+
+        }
+    ) 
+    - Go to the folder where you have your function create a new function and add route{
+        route must contain list of acceptable methods eg{
+            app.route(/register, methods=["GET","POST"])
+        }
+    }
+    - create an instance of your forms.py class [ form = class()]
+    - return render_template, an html templates(this tamplate will be in a folder called 'templates')
+    - create your templates folder and create your html file there
+    - add your form.hidden_tag()
+    - form.<field label name>
+    - form.<fieldname>{
+        examples{
+            <form method="post" action="" >
+                {{ form.hidden_tag() }}
+
+                {{ form.fname.label }}
+                {{ form.fname}}
+            </form>
+        }
+    }
+)
+
+3. Validate form submitted, redirect and give messages of creating the form(
+    -- import redirect, url_for, flash
+    -- use if form.validate_on_submit():
+    -- add your flash messages{
+        flash(f'messages here', 'bootsrap category')
+    }
+    -- redirect to your desired page
+    -- 
+)
+
+4. flash messages on form submission(
+    -- add jinja templating to the top of your body in your based layout{
+        % with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{category}} ">
+        {{ message }}
+    </div>
+    {% endfor%}
+    {% endif %}
+    {% endwith %}
+    }
+
+)
+
+5. adding individual form validators before submitting form {
+    {% extends "layout.html" %}
+{% block content %}
+<div class="container">
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Sign Up Now</legend>
+            <div class="form-group">
+                {{ form.fname.label(class="form-control-label") }}
+
+                {% if form.fname.errors %}
+                {{ form.fname(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.fname.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.fname(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{ form.lname.label(class="form-control-label") }}
+
+                    {% if form.lname.errors %}
+                    {{ form.fname(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.lname.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.lname(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <fieldset class="form-group">
+                    <div class="form-group">
+                        {{ form.Email.label(class="form-control-label") }}
+
+                        {% if form.Email.errors %}
+                        {{ form.Email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.Email.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ form.Email(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+
+                    <fieldset class="form-group">
+                        <div class="form-group">
+                            {{ form.password.label(class="form-control-label") }}
+
+                            {% if form.password.errors %}
+                            {{ form.password(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.password(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+
+
+                        <fieldset class="form-group">
+                            <div class="form-group">
+                                {{ form.Confirm_password.label(class="form-control-label") }}
+
+                                {% if form.Confirm_password.errors %}
+                                {{ form.Confirm_password(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.Confirm_password.errors %}
+                                    <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                {{ form.Confirm_password(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                {{ form.submit(class="btn btn-outline-info") }}
+                            </div>
+    </form>
+</div>
+</div>
+{% endblock %}
+}
+
+B   B   B BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+
+
+lOGIN PAGE[
+
+1. create a login funtion and also a login html within the template folder
+2. code your login function and add route(this mus contain , methods=['GET', 'POST'])
+3. write your login.html to handle input( see code in the reg section)
+
+]  
+
+C C C C CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+wORKING WITH DATABASES[
+    1. USING SQLALCHEMY Seems to be the best, it can be move around to diffrent databases, install it py runing pip install flask_sqlalchemy
+    2. specify and configure path for the db to use[
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+    ]
+    3. create an instant of the db[
+        db = SQLALCHEMY(app)
+    ]
+    4. Turing the database into package{
+        a. create a new folder with same name As the old outline
+        b. add an __init__.py file to it
+        c. move all file and folder into the new folder that has the __init__ file in it
+        d. adjust the import statement
+        e. create a new file in the new folder called rounte and move your views there
+        f. ajust the main file before to be run.py and only has the following and should be in the root folder[
+            from flask_intro import app
+            if __name__ == '__main__':
+                app.run(debug=True)
+        ] 
+        g. All import from the main package should contain the package name
+    }
+
+
+
+
+
+]
+
+D D D DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+Authentication before adding to db[
+    1.Download flask_bcrypt and import where you have your views and create an instance of the becrpt
+    2.create a hashed password using bcrypt, HP =bcrypt(instance).generate_password_hash(form password fiel).decode('utc-8)
+    3. Assign to new instance of user to be added to the db[
+        user = ModelName(fieldInModel=fieldInForm)]
+    4.All this are added after the if form.validate_on_submit
+######################################################################################
+    Authenticate user for unique email, username and the likes
+#############################################################################
+    import the db model to create an instance of it
+    from flask_intro.model import User and fliter the user object
+    5. create a function like this for all field to validate{
+        def validate_field(self, field):
+            user = User.query.filter_by(fieldInDb=FieldToFilter.data).first() this should be the same
+            if user:
+                raise validationError('Validation Message')
+        add this to the class in forms.py you want to validate
+    }
+##############################################################
+1. create login by installing flask-login, after this, initializate it in the init folder, login_manager = TheImportedloginManager(app)
+2. add the login mnager to the model file after importing it 
+3. Create a decorated function that takes a user_id{
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+4. import user Usermixin and inherit it in the class with the user_id from the mode form(User)
+5. modify the login function tocheck for details in db using this way{
+    user=User.query.filter_by(fieldIntheModel=fieldInForm)
+    if user and bcrypt.check_password_hash(user.passInDB, form.password.data)
+    login_user (user, remember=form.remember.data)
+    return redirect(url_for('destination'))
+    flash_message}
+6. redirect all route to the home page if logi, import current user from  flask_login
+7. add a current_user.is_authentucated:
+    return redirect(url_for('home))
+    for all btn on the navbar
+8. Create a logout function and add route{
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+}
+
+]
+9. condition your template to only show certain bar option on log in or logout using the jinja templating engine [
+    i class="nav-item"></li>
+        <a class="nav-link" href="{{ url_for('logout') }}">logout</a>
+        </li>
+
+        {% else %}
+        <li class="nav-item"></li>
+        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('Register') }}">Register</a>
+        </li>
+      </ul>
+      {% endif %}
+
+]
+
+#############################################
+customing pages to be viewed by login users
+#########################################3##
+  === Create the function with it route and add at the top of the function immediately after the route decorateor, add another decorator @login_required(this is imported from the flask_login module we download)
+  === Go into the init.py file and set login route{ login_manager.login_view = 'login'}
+  === create page to render_template
+  === style the error message when redirect using boostrap like this { login_manager.login_message_category = 'info'}
+  == making sure the page redirect back to the requested page after login(
+      next_page = request.args.get('next') ('next is the link url from the linkbar)
+            return redirect(next_page) if next_page else redirect(url_for('home'))
+  )
+
+  ###################################################
+  Creating account pages/
+  ###################################################
+  1. create your accounts templates and user the current_user.feild you want to show in the template using the jinja format
+  2. add your image in the template views like this, image_file = url_for('static', filename='profile_pic/' + current_user.image_file)
+  3. add the image_file variable to the template as context
+  4. use jinja template in the image field, make sure there is na image_file in the models.py too
+
+
+
+#######################################################
+Creating form to update user info when login
+#######################################################
+
+1. create a bluePrint in the forms.py file {
+    create a class with Update and inherit from Flaskform
+    copy the registration field and check to make sure the validators are ok (
+          def validate_email(self, Email):
+        if Email.data != current_user.Email:
+            user = User.query.filter_by(email=Email.data).first()
+            if user:
+                raise ValidationError('This email has been used before'
+    )
+2.  import form to route,  create  an instance of the newly created form, form=newCreatedForm()
+        add this to the account function like in the register and add the form instance as context in the render_template line
+
+3. adjust your template to display the newly added field, copy te reg field and remove cield not needed
+4. Got the route/views file and add the methods=['GET', 'POST'] to the route 
+5.           {
+    @app.route('/account', methods=['GET', 'POST'])
+@login_required
+def account():
+    form = UpdateForm()
+    if form.validate_on_submit():
+        current_user.fname = form.fname.date
+        db.session.commit()
+        flash('Details Successfully Updated', 'success')
+        return redirect(url_for('account'))
+    elif request.method == 'GET':
+        form.fname.data = current_user.fname
+    image_file = url_for('static', filename='profile_pic/' + current_user.image_file)
+    return render_template('account.html', title='Account', image_file=image_file, form=for
+    }
+6. import filefield and fielallowed from flask_wtf.file to add pic to profile when editing details
+7. create a variable to accept the pic(     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])]) )
+8. add the field to the account html field (<div class="form-group">
+                    {{ form.picture.label() }}
+                    {{ form.picture(class="form-control-file") }}
+                    {% if form.picture.errors %}
+                        {% for error in form.picture.errors %}
+                            <span class="text-danger">{{ error }}</span></br>
+                        {% endfor %}
+                    {% endif %}
+                </div>) immediatly after untop of the submit btn
+9. add enctype="multipart/form-data" to where you have your method in the account html
+10. add condition to under the if form.validate_on_submit(){
+
+     if form.picture.data:
+            picture_file = save_picture(form.picture.data) === save_picture is afunction on it own
+}
+} this is the code for resizing too {
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/profile_pic', picture_fn)
+    
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+    return picture_fn
+     
+            }
+            current_user.image_file = picture_file 
+
+
+
+======================================================
+User to add Data to dashboard
+======================================================
+
+1. create a route and function, add the @login_required to the top of the function
+2. add render_template and create the tamplate to render, extend the base template in the newly created template
+3. create a class for your form in the forms.py file with all required field
+4. import the new class in the views and create an instance of it 
+5. accept both post and get request for the route, methods=GET,POST
+6. Add the if form.validate_on_submit() to the function under the instance
+7. create a flash message with the message category
+8. Redirect to the needed page using the url_for
+9. Add the fields in the forms.py to the html that was rendered in the post route.(You can copy the login html and just make adjustment)
+10. Add the newly created template to the layout/base, where we extends and add it under the current_user.is_authentucated (run)
+
+============================================================
+Saving the data from the post to the db
+============================================================
+
+11. Add the following line to under if form.validate_on_submit() inside views or route    {
+    post = Post(title=form.title.data, content=form.content.data, author=current_user) (Post,title,content, author, are from the model)
+    db.session.add(post)
+    db.session.commit()
+}
+12. Add the post/content to the home page using this{
+    posts = Post.query.all()
+}
+13. Add the new post instance to the context of the rendered template(run)
+14 To display image, date, fname, time on the home page pesta this code there{
+                    {% extends "layout.html" %}
+        {% block content %}
+            {% for post in posts %}
+                <article class="media content-section">
+                <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pic/' + post.author.image_file) }}">
+                <div class="media-body">
+                    <div class="article-metadata">
+                    <a class="mr-2" href="#">{{ post.author.fname }}</a>
+                    <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+                    </div>
+                    <p class="article-content">{{ post.content }}</p>
+                </div>
+                </article>
+            {% endfor %}
+        {% endblock content %}
+
+}
+
+==================================================================
+Updating Post in the db
+==================================================================
+
+16. create  a route that takes in the post_id as second parament{
+    @app.route('/post/<int:post_id>') str can be specify in place of the int
+    def post(post_id):
+        post = Post.query.get_or_404(post_id)
+        return render_template(html, title)
+}
+17. Create your template and add the needed logic
+18. update Post , create a route and add the @login_required decorator with the app.route and the <post_id>
+19. create a function and pass the following to it and also add @login_required {
+
+                def update_post(post_id):
+                post = Post.query.get_or_404(post_id)
+                if post.author != current_user:
+                    abort(403)
+                form =PostForm()
+                if form.validate_on_submit():
+                    post.title = form.title.data
+                    post.content = form.content.data
+                    db.session.commit()
+                    flash('Your post has been updated', 'success')
+                    return redirect(url_for('post', post_id=post.id))
+                elif request.method == 'GET':
+                    form.title.data = post.title
+                    form.content.data = post.content
+                return render_template('new_post.html', title='Update Post', 
+                form=form, legend='Update post')
+
+}
+
+===========================================
+Deleting post
+===========================================
+20. Add logic to delete with .modal to the update html form {
+===== This htmll file was meant to post into the db but since it contain same field with the Update and Delete field, it can be use
+        {% extends "layout.html" %}
+        {% block content %}
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pic/' + post.author.image_file) }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ post.author.fname }}</a>
+              <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+            {% if post.author == current_user %}
+            <div>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_post', post_id=post.id) }}">Update</a>
+                <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+            </div>
+            {% endif %}
+            </div>
+            <h2 class="article-title"> {{ post.title }}</h2>
+            <p class="article-content">{{ post.content }}</p>
+          </div>
+        </article>
+         <!-- Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Delete Post?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
+            <input class="btn btn-danger" type="submit" value="Delete">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+}
+
+21. Create you update and delete route {
+
+
+
+@login_required
+@app.route('/delete_post/<int:post_id>/delete', methods=['POST'])
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.author != current_user:
+        abort(403)
+
+    db.session.delete(post)
+    db.session.commit()
+    flash('Your post has been Deleted Successfully', 'success')
+    return redirect(url_for('home'))
+}
+
+===============================================================
+Adding pagination to your post
+
+== Pagination is the process of separating print or digital content into discrete pages. For print documents and some online content, pagination also refers to the automated process of adding consecutive numbers to identify the sequential order of pages.
+
+===============================================================
+import pagination from flask
+1. In the homeroute where you will like to add pagination add the following code{
+        @app.route('/index')
+        @app.route('/')
+        def home():
+            page = request.args.get('page', 1, type=int)
+            posts = Post.query.paginate(page=page, per_page=1)
+            return render_template('home.html', posts=posts)
+
+    ======== the pagination has a verity of function thta can be help when adding ppagination
+    dir(pagination)
+}
+
+2. For the numbers that appears at the bottom of pages you can add the above code use this in the html that works 
+3.with the route{
+
+    {% extends "layout.html" %}
+{% block content %}
+    {% for post in posts.items %}
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pic/' + post.author.image_file) }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ post.author.fname }}</a>
+              <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+            </div>
+            <h2> <a class="article-title" href={{url_for('post', post_id=post.id)}}>{{ post.title }}</a></h2>
+            <p class="article-content">{{ post.content }}</p>
+          </div>
+        </article>
+        {% endfor %}
+        {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+          {% if posts.page == page_num %}
+            <a class="btn btn-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+          {% else %}
+            <a class="btn btn-outline-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+          {% endif %}
+        {% else %}
+          ...
+        {% endif %}
+      {% endfor %}
+{% endblock content %}}
+

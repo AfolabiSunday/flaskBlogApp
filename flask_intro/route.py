@@ -11,9 +11,13 @@ from flask_intro.forms import RegistratForm, LoginForm, UpdateForm, PostForm
 from flask_intro import app, bcrypt, db
 from flask_login import login_user, current_user, logout_user, login_required
 
-@app.route('/index')
+
+
+@app.31:21
+@app.31:21
 def home():
-    posts = Post.query.all()
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.paginate(page=page, per_page=5)
     return render_template('home.html', posts=posts)
 
 
