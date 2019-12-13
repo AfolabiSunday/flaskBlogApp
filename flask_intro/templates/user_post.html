@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+    <hi class="mb-3">Posts by {{user.fname}} ({{posts.total }})</hi>
     {% for post in posts.items %}
         <article class="media content-section">
           <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pic/' + post.author.image_file) }}">
@@ -25,5 +26,8 @@
         {% endif %}
       {% endfor %}
 {% endblock content %}
+
+
+
 
 
