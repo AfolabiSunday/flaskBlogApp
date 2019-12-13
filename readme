@@ -599,3 +599,49 @@ def user_post(fname):
 ================================================================================
 reseting user password with their email
 ================================================================================
+1. from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+2. Create the following function within your user Class{
+   def get_reset_token(self, expires_sec=1800):
+        s = Serializer(app.config['SECRET_KEY'], expires_sec)
+        return s.dumps({'user_id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_reset_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
+}
+
+3. Create a form for the user to reset their password, create the form in the forms.py file{
+    class RequestResetForm(FlaskForm):
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is None:
+            raise ValidationError('There is no account with that email. You must register first.')
+            
+            
+    class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password',
+                                     validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')
+    }
+
+4. install flask-mail
+5. config the following in your init file{
+    app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_USER')
+app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASS')
+mail = Mail(app)
+}
+
+
