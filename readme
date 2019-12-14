@@ -645,3 +645,52 @@ mail = Mail(app)
 }
 
 
+===============================================================
+CREATING BLUEPRINT FOR YOUR APP STEPS
+===============================================================
+#### bluePrint are ways to make code reuseable and standealon ####
+1. Create a folder with their names and add an init.py file to make it a package
+2. create the following file within your folders, forms.py, route.py( within the users folder add utils.py)
+3. Copy the needed functions or method to this file within the new folder created as package, from flask import BLUEPRINT and create an instance of the bluePrint(
+            from flask import Blueprint
+            users = Blueprint('users', __name__)====== this import is needed for all file that will have .route for url and the instance variable is used in place of the app(app.route to instanceVariable.route)
+
+)
+4. Add all the forms specific to each file to their file within the folder, copy all forms specific to users and add them to the users form within the users bluePrint
+5. Handle all the Import to make sure no errors
+6. import route of our individual folder to the main project __init__.py file(
+
+        from flask_intro.users.route import users- This Users is the instance variable created in the user route file
+)
+7. register the bluePrint print of this folders(
+        app.register_blueprint(users)
+)
+
+8. change the url_for to handle where the file is coming from, see corey schefar video if not clear
+====================================================================================================
+see corey schefar video on creating function for app instance for larger application if there is need for this
+===========================================================================================================
+CREATING ERROR PAGES FOR THE APP TO AVOID BLANK 404 error page
+===========================================================================================================
+
+1 Create a package file for the error page, add __init__.py file to be recognized as package
+2. Create a new file to add the following code(
+
+    from flask import Blueprint, render_template
+
+errors = Blueprint('errors', __name__)
+
+
+@errors.app_errorhandler(404)
+def error_404(error):
+    return render_template('errors/404.html'), 404 { the 404 should be chnage the error code of the error we want to handle}
+
+)
+3. In the main templates folder where other html file are, create a new folder with nthe name error, inside the error folder create the html rendered in no 2 of this readme
+
+4. Within the new html file you can create your logic there now.
+5. after this, register your bluePrint in the init file (
+    from flask_intro.Errors.handlers import errors
+    app.register_blueprint(errors)
+)
+
